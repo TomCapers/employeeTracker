@@ -4,52 +4,57 @@ const cTable = require('console.table');
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  // Your port; if not 3306
+  
   port: 3306,
-  // Your username
+
   user: 'root',
-  // Be sure to update with your own MySQL password!
-  password: '',
-  database: 'top_songsDB',
+  
+  password: '2299@Zeus!',
+  database: 'staff_db',
 });
-connection.connect((err) => {
-  if (err) throw err;
-  runSearch();
-});
-const runSearch = () => {
+
+const start = () => {
   inquirer
     .prompt({
       name: 'action',
       type: 'rawlist',
       message: 'What would you like to do?',
       choices: [
-        'Find songs by artist',
-        'Find all artists who appear more than once',
-        'Find data within a specific range',
-        'Search for a specific song',
-        'Find artists with a top song and top album in the same year',
+        'View Employees',
+        'View Roles',
+        'View Departments',
+        'Add Employee',
+        'Add Role',
+        'Add Department'
       ],
     })
     .then((answer) => {
-      switch (answer.action) {
-        case 'Find songs by artist':
-          artistSearch();
+      switch (answer) {
+        case 'View Employees':
+          employeeSearch();
           break;
-        case 'Find all artists who appear more than once':
-          multiSearch();
+        case 'View Roles':
+          roleSearch();
           break;
-        case 'Find data within a specific range':
-          rangeSearch();
+        case 'View Departments':
+          departmentSearch();
           break;
-        case 'Search for a specific song':
-          songSearch();
+        case 'Add Employee':
+          employeeAdd();
           break;
-        case 'Find artists with a top song and top album in the same year':
-          songAndAlbumSearch();
+        case 'Add Role':
+          roleAdd();
           break;
-        default:
-          console.log(`Invalid action: ${answer.action}`);
+        case 'Add Department':
+          departmentAdd();
           break;
+        
       }
     });
 };
+
+connection.connect((err) => {
+    if (err) throw err;
+    
+    start();
+});
