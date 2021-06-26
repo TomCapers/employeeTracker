@@ -53,6 +53,48 @@ const start = () => {
     });
 };
 
+const employeeSearch = () =>{
+    connection.query('SELECT * FROM employee', (err, results) => {
+        if (err) throw err;
+        console.log(results);
+})};
+
+const roleSearch = () =>{
+  connection.query('SELECT * FROM emp_role', (err, results) => {
+      if (err) throw err;
+      console.log(results);
+})};
+
+const departmentSearch = () =>{
+  connection.query('SELECT * FROM department', (err, results) => {
+      if (err) throw err;
+      console.log(results);
+})};
+
+const employeeAdd = () =>{
+  inquirer
+      .prompt([
+        {
+          name: 'id',
+          type: 'input',
+          message: 'Enter ID: '
+        }
+      ])
+      .then((answer) => {
+        const query = connection.query(
+          'INSERT INTO employee (id,',
+          
+          (err, res) => {
+            if (err) throw err;
+            console.log(`${res.affectedRows} product inserted!\n`);
+            
+           
+          }
+        );
+      }
+
+      )};
+
 connection.connect((err) => {
     if (err) throw err;
     
