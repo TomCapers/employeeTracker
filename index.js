@@ -37,7 +37,7 @@ const start = () => {
       ],
     })
     .then((answer) => {
-      switch (answer) {
+      switch (answer.action) {
         case 'View Employees':
           employeeSearch();
           break;
@@ -64,36 +64,30 @@ const start = () => {
 };
 
 const employeeSearch = () =>{
-    connection.query('SELECT * FROM employee', (err, results) => {
+    connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
-        console.log(results);
+        const table = cTable.getTable(res);
+        console.log(table);
         start();
 })};
 
 const roleSearch = () =>{
-  connection.query('SELECT * FROM emp_role', (err, results) => {
+  connection.query('SELECT * FROM emp_role', (err, res) => {
       if (err) throw err;
-      console.log(results);
+      const table = cTable.getTable(res)
+      console.log(table);
       start();
 })};
 
 const departmentSearch = () =>{
-  connection.query('SELECT * FROM department', (err, results) => {
+  connection.query('SELECT * FROM department', (err, res) => {
       if (err) throw err;
-      console.log(results);
+      const table = cTable.getTable(res)
+      console.log(table);
       start();
 })};
 
 const employeeAdd = () =>{
-  const manager = [];
-  connection.query('SELECT manager_id FROM employee', (err, results)=> {
-    manager.push(results);
-  
-    const roleId = [];
-    connection.query('SELECT role_id FROM emp_role', (err, results)=> {
-      roleId.push(results);
-
-
       inquirer
       .prompt([
         {
@@ -113,25 +107,36 @@ const employeeAdd = () =>{
         },
         {
           name: "managerId",
-          type: "rawlist",
+          type: "input",
           message: "What is the manager ID?",
           choices: manager
         },
         {
           name: "roleId",
-          type: "rawlist",
+          type: "input",
           message: "What is the role ID?",
           choices: manager
         },
       ])
       .then((answer) => {
-        const query = connection.query(
-          'INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES ("${res.id}", "${res.first_name}", "${res.last_name}", "${res.manager_id}", "${res.role_id}")',
-             
-           (err, res) => {
-            if (err) throw err;
-            console.log(`${res.affectedRows} employee added!\n`);
-           })})})})}
+        connection.query(
+          'INSERT INTO employees SET ?', 
+          {
+            id: answer.id,  
+            first_name: answer.first,
+            last_name: answer.last,
+            manager_id: answer.managerId,
+            role_id: answer.roleId,
+          },
+          (err) => {
+              if (err) throw err;
+              console.log(`You have added, ${answer.firstname} ${answer.lastname}.`);
+              
+              start();
+          }
+      );
+  });
+}
           
         
 
