@@ -4,11 +4,8 @@ const cTable = require('console.table');
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  
   port: 3306,
-
   user: 'root',
-  
   password: '2299@Zeus!',
   database: 'staff_db',
 });
@@ -33,7 +30,6 @@ const start = () => {
         'Add Employee',
         'Add Role',
         'Add Department',
-        'Update Role',
         'Exit'
       ],
     })
@@ -90,23 +86,23 @@ const employeeAdd = () =>{
         {
           name: 'first',
           type: 'input',
-          message: 'First Name: '
+          message: 'Please enter the First Name: '
         },
         {
           name: 'last',
           type: 'input',
-          message: 'Last Name: '
+          message: 'Please enter the Last Name: '
         },
         {
           name: "roleId",
           type: "input",
-          message: "What is the role ID?",
+          message: "What is the role ID for the employee?",
           choices: manager
         },
         {
           name: "managerId",
           type: "input",
-          message: "What is the manager ID?",
+          message: "What is the employee's manager ID?",
           choices: manager
         },
       ])
