@@ -101,15 +101,15 @@ const employeeAdd = () =>{
           message: 'Last Name: '
         },
         {
-          name: "managerId",
-          type: "input",
-          message: "What is the manager ID?",
-          choices: manager
-        },
-        {
           name: "roleId",
           type: "input",
           message: "What is the role ID?",
+          choices: manager
+        },
+        {
+          name: "managerId",
+          type: "input",
+          message: "What is the manager ID?",
           choices: manager
         },
       ])
@@ -119,8 +119,8 @@ const employeeAdd = () =>{
           {
             first_name: answer.first,
             last_name: answer.last,
-            manager_id: answer.managerId,
             role_id: answer.roleId,
+            manager_id: answer.managerId,
           },
           (err) => {
               if (err) throw err;
@@ -166,7 +166,30 @@ const roleAdd = () =>{
           });
   });
 };
-          
+
+const departmentAdd = () => {
+  inquirer
+  .prompt({
+      name: 'newDept',
+      type: 'input',
+      message: "Please enter the new department name:",
+  })
+  .then((answer) => {
+      connection.query(
+          'INSERT INTO department SET ?',
+      {
+          name: answer.newDept,
+      },
+      (err) => {
+          if (err) throw err;
+          console.log('----------------------------------------------------------------------------------');
+          console.log(`Congratualtions! You have successfully created the "${answer.newDept}" department.`);
+          console.log('----------------------------------------------------------------------------------');
+          start(); 
+      }
+      );
+  })
+};
         
 
 
