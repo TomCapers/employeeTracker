@@ -91,11 +91,6 @@ const employeeAdd = () =>{
       inquirer
       .prompt([
         {
-          name: 'id',
-          type: 'input',
-          message: 'Enter ID: '
-        },
-        {
           name: 'first',
           type: 'input',
           message: 'First Name: '
@@ -122,7 +117,6 @@ const employeeAdd = () =>{
         connection.query(
           'INSERT INTO employees SET ?', 
           {
-            id: answer.id,  
             first_name: answer.first,
             last_name: answer.last,
             manager_id: answer.managerId,
@@ -136,7 +130,42 @@ const employeeAdd = () =>{
           }
       );
   });
-}
+};
+
+const roleAdd = () =>{
+  inquirer
+  .prompt([
+      {
+          name: 'title',
+          type: 'input',
+          message: "Enter the new role title:",
+      },
+      {
+          name: 'salary',
+          type: 'input',
+          message: 'Please enter the salary for this role:',
+      },
+      {
+          name: 'deptId',
+          type: 'input',
+          message: 'Please enter the Department ID for this role:',
+      }
+  ])
+  .then((answer) => {
+      connection.query(
+          'INSERT INTO emp_role SET ?',//
+          {
+              title: answer.title,
+              salary: answer.salary,
+              department_id: answer.deptId,
+          },
+          (err) => {
+              if (err) throw err;
+              console.log(`The role "${answer.title}" has been added.`);
+              start();
+          });
+  });
+};
           
         
 
