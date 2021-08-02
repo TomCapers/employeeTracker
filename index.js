@@ -23,8 +23,8 @@ connection.connect((err) => {
 const start = () => {
   inquirer
     .prompt({
-      name: 'action',
-      type: 'rawlist',
+      name: 'listoption',
+      type: 'list',
       message: 'What would you like to do?',
       choices: [
         'View Employees',
@@ -33,31 +33,28 @@ const start = () => {
         'Add Employee',
         'Add Role',
         'Add Department',
-        'Update Role'
+        'Update Role',
+        'Exit'
       ],
     })
     .then((answer) => {
-      switch (answer.action) {
+      switch (answer.listoption) {
         case 'View Employees':
-          employeeSearch();
-          break;
+          return employeeSearch();
         case 'View Roles':
-          roleSearch();
-          break;
+          return roleSearch();
         case 'View Departments':
-          departmentSearch();
-          break;
+          return departmentSearch();
         case 'Add Employee':
-          employeeAdd();
-          break;
+          return employeeAdd();
         case 'Add Role':
-          roleAdd();
-          break;
+          return roleAdd();
         case 'Add Department':
-          departmentAdd();
-        case 'Update Role':
-          roleUpdate();
-          break;
+          return departmentAdd();
+        // case 'Update Role':
+        //   roleUpdate();
+        case 'Exit':
+            connection.end();
         
       }
     });
@@ -182,9 +179,7 @@ const departmentAdd = () => {
       },
       (err) => {
           if (err) throw err;
-          console.log('----------------------------------------------------------------------------------');
-          console.log(`Congratualtions! You have successfully created the "${answer.newDept}" department.`);
-          console.log('----------------------------------------------------------------------------------');
+          console.log(`You have added the "${answer.newDept}" department.`);
           start(); 
       }
       );
