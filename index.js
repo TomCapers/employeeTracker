@@ -30,6 +30,7 @@ const start = () => {
         'Add Employee',
         'Add Role',
         'Add Department',
+        'Update Role',
         'Exit'
       ],
     })
@@ -47,8 +48,8 @@ const start = () => {
           return roleAdd();
         case 'Add Department':
           return departmentAdd();
-        // case 'Update Role':
-        //   roleUpdate();
+        case 'Update Role':
+          return roleUpdate();
         case 'Exit':
             connection.end();
         
@@ -97,18 +98,16 @@ const employeeAdd = () =>{
           name: "roleId",
           type: "input",
           message: "What is the role ID for the employee?",
-          choices: manager
         },
         {
           name: "managerId",
           type: "input",
           message: "What is the employee's manager ID?",
-          choices: manager
         },
       ])
       .then((answer) => {
         connection.query(
-          'INSERT INTO employees SET ?', 
+          'INSERT INTO employee SET ?', 
           {
             first_name: answer.first,
             last_name: answer.last,
@@ -117,7 +116,7 @@ const employeeAdd = () =>{
           },
           (err) => {
               if (err) throw err;
-              console.log(`You have added, ${answer.firstname} ${answer.lastname}.`);
+              console.log(`You have added, ${answer.first} ${answer.last}.`);
               
               start();
           }
@@ -181,6 +180,66 @@ const departmentAdd = () => {
       );
   })
 };
+
+const roleUpdate = () => {
+  
+  connection.query("SELECT id FROM emp_role", (err, results) => {
+    if (err) throw err;
+    
+  inquirer
+  .prompt([
+    {
+    name: 'choice',
+    type: 'rawlist',
+    choices(){
+      const roleArray = [];
+      results.forEach(({id}) => {
+        roleArray.push(id);
+      });
+      return roleArray;
+    },
+    message: 'Which role would you like to update?',
+    
+    },
+    {
+      name: 'title',
+      type: 'input',
+      message: "Enter the new role title:",
+  },
+  {
+      name: 'salary',
+      type: 'input',
+      message: 'Please enter the salary for this role:',
+  },
+  {
+      name: 'deptId',
+      type: 'input',
+      message: 'Please enter the Department ID for this role:',
+  }
+  ])
+  .then((answer) => {
+
+    
+    connection.query(
+      'UPDATE emp_role SET ? WHERE ?',
+      [
+      {
+          title: answer.title,
+          salary: answer.salary,
+          department_id: answer.deptId,
+      },
+      {
+        id: answer.id,
+      },
+    ],
+      (err) => {
+          if (err) throw err;
+          console.log(`The role has been updated.`);
+          start();
+      });
+
+  })
+})}
         
 
 
